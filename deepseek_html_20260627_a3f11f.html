@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOPE SASA MD — Pair</title>
+
+    <!-- Font & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        /* ── Reset & Base ── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 20% 50%, #1a0b2e 0%, #0d0a1a 70%);
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ── Animated Orbs ── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+        }
+        .orb--1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            right: -150px;
+            background: rgba(138, 43, 226, 0.35);
+        }
+        .orb--2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            background: rgba(0, 200, 255, 0.25);
+            animation-delay: 4s;
+        }
+        .orb--3 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 200, 0.15);
+            animation-delay: 8s;
+            filter: blur(120px);
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(40px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 40px) scale(0.9);
+            }
+            100% {
+                transform: translate(30px, 20px) scale(1.05);
+            }
+        }
+
+        /* ── Glass Card ── */
+        .glass {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            padding: 44px 36px 40px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* ── Brand ── */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #9b4dff, #6c0ba9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(108, 11, 169, 0.4);
+            flex-shrink: 0;
+        }
+
+        .brand h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+        .brand h1 span {
+            color: #b388ff;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 400;
+            margin-top: -2px;
+            margin-bottom: 28px;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subtitle i {
+            font-size: 10px;
+            color: #7c4dff;
+        }
+
+        /* ── Status Badge ── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 6px 14px 6px 10px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+        }
+        .status-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        /* ── Form ── */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .input-wrap {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            overflow: hidden;
+        }
+        .input-wrap:focus-within {
+            border-color: rgba(155, 77, 255, 0.5);
+            box-shadow: 0 0 0 4px rgba(155, 77, 255, 0.12);
+        }
+
+        .input-wrap .prefix {
+            padding: 0 0 0 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            font-size: 15px;
+            user-select: none;
+        }
+
+        .input-wrap input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 16px 16px 16px 8px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            outline: none;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            min-width: 0;
+        }
+        .input-wrap input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 400;
+            font-size: 15px;
+        }
+        .input-wrap input::-webkit-inner-spin-button,
+        .input-wrap input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .input-wrap input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* ── Button ── */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: linear-gradient(135deg, #9b4dff, #7c2fcf);
+            color: #fff;
+            box-shadow: 0 8px 28px rgba(108, 11, 169, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(108, 11, 169, 0.5);
+        }
+        .btn:active:not(:disabled) {
+            transform: translateY(0px);
+            box-shadow: 0 4px 16px rgba(108, 11, 169, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn.loading .spinner {
+            display: block;
+        }
+        .btn.loading .btn-text {
+            display: none;
+        }
+
+        /* ── Code Display ── */
+        .code-display {
+            margin-top: 24px;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            animation: fadeSlide 0.5s ease;
+        }
+        .code-display.show {
+            display: flex;
+        }
+
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .code-display .code {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #b388ff;
+            font-family: 'Inter', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .code-display .copy-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        .code-display .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+        .code-display .copy-btn.copied {
+            color: #4caf50;
+        }
+
+        .code-hint {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        .code-hint.show {
+            display: block;
+        }
+
+        /* ── Message ── */
+        .message {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: fadeSlide 0.35s ease;
+        }
+        .message.show {
+            display: flex;
+        }
+        .message.error {
+            background: rgba(255, 82, 82, 0.15);
+            color: #ff8a80;
+            border: 1px solid rgba(255, 82, 82, 0.15);
+        }
+        .message.success {
+            background: rgba(76, 175, 80, 0.12);
+            color: #81c784;
+            border: 1px solid rgba(76, 175, 80, 0.12);
+        }
+        .message.info {
+            background: rgba(100, 181, 246, 0.12);
+            color: #64b5f6;
+            border: 1px solid rgba(100, 181, 246, 0.12);
+        }
+
+        .message i {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 20px;
+        }
+        .footer a {
+            color: rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 520px) {
+            .glass {
+                padding: 32px 20px 28px;
+                border-radius: 24px;
+            }
+            .brand h1 {
+                font-size: 19px;
+            }
+            .brand-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+            .input-wrap input {
+                font-size: 15px;
+                padding: 14px 12px 14px 6px;
+            }
+            .btn {
+                padding: 14px 16px;
+                font-size: 15px;
+            }
+            .code-display .code {
+                font-size: 22px;
+                letter-spacing: 3px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .glass {
+                padding: 24px 14px 20px;
+            }
+            .brand h1 {
+                font-size: 16px;
+            }
+            .code-display {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .code-display .copy-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Orbs -->
+    <div class="orb orb--1"></div>
+    <div class="orb orb--2"></div>
+    <div class="orb orb--3"></div>
+
+    <!-- ─── Glass Card ─── -->
+    <main class="glass">
+
+        <!-- Brand -->
+        <div class="brand">
+            <div class="brand-icon"><i class="fas fa-robot"></i></div>
+            <h1>DOPE <span>SASA</span> MD</h1>
+        </div>
+        <div class="subtitle">
+            <i class="fas fa-circle" style="font-size:6px;color:#7c4dff;"></i>
+            Pair your WhatsApp device
+        </div>
+
+        <!-- Status -->
+        <div class="status-badge">
+            <span class="dot"></span>
+            <span>Ready to pair</span>
+        </div>
+
+        <!-- ─── Form ─── -->
+        <form id="pairForm" autocomplete="off">
+            <div class="form-group">
+                <label for="phoneInput"><i class="fas fa-phone" style="margin-right:6px;color:rgba(255,255,255,0.3);"></i> Phone number</label>
+                <div class="input-wrap">
+                    <span class="prefix">+</span>
+                    <input
+                    type="number"
+                    id="phoneInput"
+                    placeholder="94784167385"
+                    value="94784167385"
+                    required
+                    />
+                </div>
+            </div>
+
+            <button type="submit" class="btn" id="pairBtn">
+                <span class="btn-text"><i class="fas fa-link"></i> Get Pairing Code</span>
+                <span class="spinner"></span>
+            </button>
+        </form>
+
+        <!-- ─── Message ─── -->
+        <div class="message" id="message">
+            <i class="fas fa-info-circle"></i>
+            <span id="messageText"></span>
+        </div>
+
+        <!-- ─── Code Display ─── -->
+        <div class="code-display" id="codeDisplay">
+            <span class="code" id="codeText">—— —— —— ——</span>
+            <button class="copy-btn" id="copyBtn">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+        <div class="code-hint" id="codeHint">
+            <i class="fas fa-info-circle" style="margin-right:4px;"></i>
+            Enter this code in WhatsApp &nbsp;→&nbsp; <strong>Linked Devices</strong> &nbsp;→&nbsp; <strong>Link a Device</strong>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <i class="fas fa-bolt" style="margin-right:4px;"></i>
+            Powered by <a href="#" target="_blank">AnimeBails</a> &bull; v1.0
+        </div>
+
+    </main>
+
+    <!-- ─── JavaScript ─── -->
+    <script>
+        (function() {
+            'use strict';
+
+            const form = document.getElementById('pairForm');
+            const phoneInput = document.getElementById('phoneInput');
+            const pairBtn = document.getElementById('pairBtn');
+            const messageEl = document.getElementById('message');
+            const messageText = document.getElementById('messageText');
+            const codeDisplay = document.getElementById('codeDisplay');
+            const codeText = document.getElementById('codeText');
+            const copyBtn = document.getElementById('copyBtn');
+            const codeHint = document.getElementById('codeHint');
+
+            // ── Helpers ──
+            function showMessage(text, type = 'info') {
+                messageEl.className = 'message show ' + type;
+                messageText.textContent = text;
+            }
+
+            function hideMessage() {
+                messageEl.className = 'message';
+            }
+
+            function showCode(code) {
+                const formatted = code.match(/.{1,4}/g)?.join(' ') || code;
+                codeText.textContent = formatted;
+                codeDisplay.classList.add('show');
+                codeHint.classList.add('show');
+            }
+
+            function hideCode() {
+                codeDisplay.classList.remove('show');
+                codeHint.classList.remove('show');
+            }
+
+            function setLoading(loading) {
+                if (loading) {
+                    pairBtn.classList.add('loading');
+                    pairBtn.disabled = true;
+                } else {
+                    pairBtn.classList.remove('loading');
+                    pairBtn.disabled = false;
+                }
+            }
+
+            function copyCode() {
+                const raw = codeText.textContent.replace(/\s/g, '');
+                if (!raw) return;
+                navigator.clipboard.writeText(raw).then(() => {
+                    copyBtn.classList.add('copied');
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    }, 2200);
+                }).catch(() => {
+                    // fallback
+                    const range = document.createRange();
+                    range.selectNode(codeText);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand('copy');
+                    window.getSelection().removeAllRanges();
+                    copyBtn.classList.add('copied');
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    }, 2200);
+                });
+            }
+
+            // ── Copy listener ──
+            copyBtn.addEventListener('click', copyCode);
+
+            // ── Form submit ──
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const raw = phoneInput.value.trim().replace(/\D/g, '');
+                if (!raw || raw.length < 7) {
+                    showMessage('Please enter a valid phone number (at least 7 digits).', 'error');
+                    return;
+                }
+
+                hideMessage();
+                hideCode();
+                setLoading(true);
+
+                try {
+                    const resp = await fetch('/pair', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ number: raw }),
+                    });
+
+                    const data = await resp.json();
+
+                    if (!resp.ok) {
+                        throw new Error(data.message || 'Pairing request failed.');
+                    }
+
+                    if (data.code) {
+                        showCode(data.code);
+                        showMessage('✅ Pairing code generated! Enter it in WhatsApp.', 'success');
+                    } else if (data.message) {
+                        showMessage(data.message, 'info');
+                    } else {
+                        showMessage('✅ Pairing initiated. Check the code above.', 'success');
+                    }
+
+                } catch (err) {
+                    console.error('[Pair]', err);
+                    showMessage('❌ ' + (err.message || 'Something went wrong. Please try again.'), 'error');
+                } finally {
+                    setLoading(false);
+                }
+            });
+
+            // ── Auto-submit on Enter ──
+            phoneInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    form.dispatchEvent(new Event('submit'));
+                }
+            });
+
+            // ── Focus input on load ──
+            setTimeout(() => phoneInput.focus(), 300);
+
+        })();
+    </script>
+
+</body>
+</html>
