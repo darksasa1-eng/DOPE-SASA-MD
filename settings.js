@@ -15,7 +15,7 @@ const settings = {
   telegramGroup: "https://t.me/dopesasazmdz",
 
   // GitHub DB
-  githubToken: "YOUR_GITHUB_TOKEN",
+  githubToken: "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",
   githubOwner: "supportsasatech-arch",
   githubRepo: "database",
 
